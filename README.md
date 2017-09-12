@@ -4,9 +4,8 @@ Tesseract-OCR-Scanner是基于Tesseract-OCR实现的数字自动识别。
 
 实现效果图
 
-![preview](/preview/1.jpg)
-![preview](/preview/2.jpg)
-![preview](/preview/3.jpg)
+<img src="/preview/1.jpg" width="280px"/> <img src="/preview/2.jpg" width="280px"/>
+ <img src="/preview/3.jpg" width="280px"/>
 
 ## 实现说明
 
