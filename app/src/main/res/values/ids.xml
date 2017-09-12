@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="auto_focus"/>
+    <item type="id" name="decode"/>
+    <item type="id" name="decode_failed"/>
+    <item type="id" name="decode_succeeded"/>
+    <item type="id" name="encode_failed"/>
+    <item type="id" name="encode_succeeded"/>
+    <item type="id" name="quit"/>
+    <item type="id" name="restart_preview"/>
+</resources>

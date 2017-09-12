@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ViewStub
+        android:id="@+id/qr_code_view_stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/qr_code_header_bar"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@android:color/black"
+        android:text="@string/title_activity_scan_qr_code"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <com.zl.tesseract.scanner.view.ScannerFinderView
+        android:id="@+id/qr_code_view_finder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <View
+        android:layout_below="@id/qr_code_header_bar"
+        android:id="@+id/qr_code_view_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:visibility="gone"/>
+
+    <Switch
+        android:id="@+id/switch1"
+        android:text="@string/is_qr_code_scanner"
+        android:layout_margin="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Switch
+        android:id="@+id/switch2"
+        android:text="@string/is_open_flashlight"
+        android:layout_margin="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/bt"
+        android:text="@string/take_photos"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

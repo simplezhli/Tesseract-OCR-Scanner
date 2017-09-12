@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFFFF</color>
+    <color name="finder_mask">#80000000</color>
+    <color name="finder_frame">#FFFFFFFF</color>
+    <color name="finder_laser">#0db8f6</color>
+</resources>
