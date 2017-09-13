@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
+import android.text.TextUtils;
 
 import com.zl.tesseract.scanner.camera.CameraConfigurationUtils;
 
@@ -168,7 +169,7 @@ public class Tools {
     }
 
     public static String getTelNum(String sParam){
-        if(sParam.length()<=0){
+        if(TextUtils.isEmpty(sParam)){
             return "";
         }
 

@@ -2,6 +2,7 @@ package com.zl.tesseract.scanner;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.view.SurfaceHolder;
@@ -51,6 +53,8 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
     private Switch switch1;
     private Button bt;
 
+    private ProgressDialog progressDialog;
+    private Bitmap bmp;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -72,6 +76,7 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
             @Override
             public void onClick(View v) {
                 bt.setEnabled(false);
+                buildProgressDialog();
                 CameraManager.get().takeShot(ScannerActivity.this, ScannerActivity.this, ScannerActivity.this);
             }
         });
@@ -239,22 +244,30 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
         if (data == null) {
             return;
         }
-        mCaptureActivityHandler.quitSynchronously();
-        final Bitmap bmp = Tools.getFocusedBitmap(this, camera, data, getCropRect());
+        mCaptureActivityHandler.onPause();
+        bmp = null;
+        bmp = Tools.getFocusedBitmap(this, camera, data, getCropRect());
 
-        new TesseractThread(bmp, new TesseractCallback() {
+        TesseractThread mTesseractThread = new TesseractThread(bmp, new TesseractCallback() {
+
             @Override
             public void succeed(String result) {
-                bt.setEnabled(true);
-                phoneSucceed(result, bmp);
+                Message message = Message.obtain();
+                message.what = 0;
+                message.obj = result;
+                mHandler.sendMessage(message);
             }
 
             @Override
             public void fail() {
-                bt.setEnabled(true);
-                Toast.makeText(ScannerActivity.this, "无法识别", Toast.LENGTH_SHORT).show();
+                Message message = Message.obtain();
+                message.what = 1;
+                mHandler.sendMessage(message);
             }
-        }).run();
+        });
+
+        Thread thread = new Thread(mTesseractThread);
+        thread.start();
     }
 
     @Override
@@ -290,5 +303,40 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
                 restartPreview();
             }
         });
+    }
+
+    private Handler mHandler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            bt.setEnabled(true);
+            cancelProgressDialog();
+            switch (msg.what){
+                case 0:
+                    phoneSucceed((String) msg.obj, bmp);
+                    break;
+                case 1:
+                    Toast.makeText(ScannerActivity.this, "无法识别", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    public void buildProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        }
+        progressDialog.setMessage("识别中...");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    public void cancelProgressDialog() {
+        if (progressDialog != null)
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
     }
 }

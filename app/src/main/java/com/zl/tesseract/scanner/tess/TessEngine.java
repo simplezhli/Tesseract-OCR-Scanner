@@ -34,12 +34,13 @@ public class TessEngine {
         tessBaseAPI.init(path, "eng");
         tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"); // 白名单
         tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-[]}{;:'\"\\|~`,./<>?"); // 黑名单
-        tessBaseAPI.setPageSegMode(TessBaseAPI.OEM_TESSERACT_CUBE_COMBINED);
+        tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO_OSD);
         Log.d(TAG, "Ended initialization of TessEngine");
         Log.d(TAG, "Running inspection on bitmap");
         tessBaseAPI.setImage(bitmap);
-        String inspection = tessBaseAPI.getUTF8Text();
-        Log.d(TAG, "Got data: " + inspection);
+        String inspection = tessBaseAPI.getHOCRText(0);
+
+        Log.d(TAG, "Confidence values: " + tessBaseAPI.meanConfidence());
         tessBaseAPI.end();
         System.gc();
         return Tools.getTelNum(inspection);

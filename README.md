@@ -14,6 +14,7 @@ Tesseract-OCR-Scanner是基于Tesseract-OCR实现的数字自动识别。
 ## Thanks For
 
 - https://github.com/rmtheis/tess-two
+- https://github.com/iluhcm/QrCodeScanner
 - https://www.codeproject.com/tips/840623/android-character-recognition
 - http://www.cnblogs.com/asingingfish/p/6196638.html?utm_source=itdadao&utm_medium=referral
 

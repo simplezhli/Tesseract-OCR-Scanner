@@ -1,6 +1,7 @@
 package com.zl.tesseract.scanner.tess;
 
 import android.graphics.Bitmap;
+import android.os.Looper;
 
 import com.zl.tesseract.scanner.MyApplication;
 

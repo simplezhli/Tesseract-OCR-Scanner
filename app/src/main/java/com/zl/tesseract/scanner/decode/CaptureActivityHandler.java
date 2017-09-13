@@ -94,4 +94,8 @@ public final class CaptureActivityHandler extends Handler {
         PREVIEW, SUCCESS, DONE
     }
 
+    public void onPause() {
+        mState = State.DONE;
+        CameraManager.get().stopPreview();
+    }
 }
