@@ -9,7 +9,7 @@ Tesseract-OCR-Scanner是基于Tesseract-OCR实现的数字自动识别。
 
 ## 实现说明
 
-具体参考博客：http://blog.csdn.net/qq_17766199
+具体参考博客：http://blog.csdn.net/qq_17766199/article/details/77963278
 
 ## Thanks For
 
