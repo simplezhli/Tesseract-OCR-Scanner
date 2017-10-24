@@ -295,7 +295,7 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
     private void phoneSucceed(String result, Bitmap bitmap){
         ImageDialog dialog = new ImageDialog(this);
         dialog.addBitmap(bitmap);
-        dialog.addTitle(result);
+        dialog.addTitle(TextUtils.isEmpty(result) ? "未识别到手机号码" : result);
         dialog.show();
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -319,6 +319,8 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
                 case 1:
                     Toast.makeText(ScannerActivity.this, "无法识别", Toast.LENGTH_SHORT).show();
                     break;
+                default:
+                    break;
             }
         }
     };
@@ -334,9 +336,10 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
     }
 
     public void cancelProgressDialog() {
-        if (progressDialog != null)
+        if (progressDialog != null){
             if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
+        }
     }
 }

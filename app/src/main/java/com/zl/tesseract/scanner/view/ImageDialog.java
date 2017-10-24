@@ -21,14 +21,16 @@ public class ImageDialog extends Dialog {
     }
 
     public ImageDialog addBitmap(Bitmap bmp) {
-        if (bmp != null)
+        if (bmp != null){
             this.bmp = bmp;
+        }
         return this;
     }
 
     public ImageDialog addTitle(String title) {
-        if (title != null)
+        if (title != null){
             this.title = title;
+        }
         return this;
     }
 
@@ -40,11 +42,13 @@ public class ImageDialog extends Dialog {
         ImageView imageView = (ImageView)findViewById(R.id.image_dialog_imageView);
         TextView textView = (TextView)findViewById(R.id.image_dialog_textView);
 
-        if (bmp != null)
+        if (bmp != null){
             imageView.setImageBitmap(bmp);
+        }
 
-        if(title!=null)
+        if(title!=null){
             textView.setText(this.title);
+        }
     }
 
     @Override

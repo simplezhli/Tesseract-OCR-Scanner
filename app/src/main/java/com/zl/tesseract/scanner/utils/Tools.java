@@ -150,8 +150,9 @@ public class Tools {
         Bitmap bmp = Tools.createScaledBitmap(unscaledBitmap, X, Y, ScalingLogic.CROP);
         unscaledBitmap.recycle();
 
-        if (CW > CH)
+        if (CW > CH){
             bmp = Tools.rotateBitmap(bmp, 90);
+        }
 
         int BW = bmp.getWidth();
         int BH = bmp.getHeight();
@@ -168,12 +169,13 @@ public class Tools {
         return res;
     }
 
+    private static Pattern pattern = Pattern.compile("(1|861)(3|5|7|8)\\d{9}$*");
+
     public static String getTelNum(String sParam){
         if(TextUtils.isEmpty(sParam)){
             return "";
         }
-
-        Pattern pattern = Pattern.compile("(1|861)(3|5|7|8)\\d{9}$*");
+        
         Matcher matcher = pattern.matcher(sParam);
         StringBuilder bf = new StringBuilder();
         while (matcher.find()) {

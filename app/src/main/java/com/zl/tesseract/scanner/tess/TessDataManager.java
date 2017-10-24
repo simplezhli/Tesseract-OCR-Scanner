@@ -40,18 +40,22 @@ public class TessDataManager {
 
     public static void initTessTrainedData(Context context){
 
-        if(initiated)
+        if(initiated){
             return;
+        }
 
         File appFolder = context.getFilesDir();
         File folder = new File(appFolder, tessdir);
-        if(!folder.exists())
+        if(!folder.exists()){
             folder.mkdir();
+        }
+            
         tesseractFolder = folder.getAbsolutePath();
 
         File subfolder = new File(folder, subdir);
-        if(!subfolder.exists())
+        if(!subfolder.exists()){
             subfolder.mkdir();
+        }
 
         File file = new File(subfolder, filename);
         trainedDataPath = file.getAbsolutePath();
@@ -62,8 +66,10 @@ public class TessDataManager {
             try {
                 FileOutputStream fileOutputStream;
                 byte[] bytes = readRawTrainingData(context);
-                if (bytes == null)
+                if (bytes == null){
                     return;
+                }
+                    
                 fileOutputStream = new FileOutputStream(file);
                 fileOutputStream.write(bytes);
                 fileOutputStream.close();

@@ -215,7 +215,7 @@ public final class ScannerFinderView extends RelativeLayout {
 
     private OnTouchListener getTouchListener() {
 
-        if (touchListener == null)
+        if (touchListener == null){
             touchListener = new OnTouchListener() {
 
                 int lastX = -1;
@@ -233,76 +233,78 @@ public final class ScannerFinderView extends RelativeLayout {
                             int currentY = (int) event.getY();
                             try {
                                 Rect rect = mFrameRect;
-                                final int BUFFER = 50;
-                                final int BIG_BUFFER = 60;
+                                final int BUFFER = 60;
                                 if (lastX >= 0) {
+                                    
+                                    boolean currentXLeft = currentX >= rect.left - BUFFER && currentX <= rect.left + BUFFER;
+                                    boolean currentXRight = currentX >= rect.right - BUFFER && currentX <= rect.right + BUFFER;
+                                    boolean lastXLeft = lastX >= rect.left - BUFFER && lastX <= rect.left + BUFFER;
+                                    boolean lastXRight = lastX >= rect.right - BUFFER && lastX <= rect.right + BUFFER;
+                                    
+                                    boolean currentYTop = currentY <= rect.top + BUFFER && currentY >= rect.top - BUFFER;
+                                    boolean currentYBottom = currentY <= rect.bottom + BUFFER && currentY >= rect.bottom - BUFFER;
+                                    boolean lastYTop = lastY <= rect.top + BUFFER && lastY >= rect.top - BUFFER;
+                                    boolean lastYBottom = lastY <= rect.bottom + BUFFER && lastY >= rect.bottom - BUFFER;
+                                    
+                                    boolean XLeft = currentXLeft || lastXLeft;
+                                    boolean XRight = currentXRight || lastXRight;
+                                    boolean YTop = currentYTop || lastYTop;
+                                    boolean YBottom = currentYBottom || lastYBottom;
+                                    
+                                    boolean YTopBottom = (currentY <= rect.bottom && currentY >= rect.top)
+                                            || (lastY <= rect.bottom && lastY >= rect.top);
 
-                                    if (((currentX >= rect.left - BIG_BUFFER && currentX <= rect.left + BIG_BUFFER)
-                                            || (lastX >= rect.left - BIG_BUFFER && lastX <= rect.left + BIG_BUFFER))
-                                            && ((currentY <= rect.top + BIG_BUFFER && currentY >= rect.top - BIG_BUFFER)
-                                            || (lastY <= rect.top + BIG_BUFFER && lastY >= rect.top - BIG_BUFFER))) { //右上角
-                                        updateBoxRect(2 * (lastX - currentX), (lastY - currentY), true);
-
-                                    } else if (((currentX >= rect.right - BIG_BUFFER && currentX <= rect.right + BIG_BUFFER)
-                                            || (lastX >= rect.right - BIG_BUFFER && lastX <= rect.right + BIG_BUFFER))
-                                            && ((currentY <= rect.top + BIG_BUFFER && currentY >= rect.top - BIG_BUFFER)
-                                            || (lastY <= rect.top + BIG_BUFFER && lastY >= rect.top - BIG_BUFFER))) { //左上角
+                                    boolean XLeftRight = (currentX <= rect.right && currentX >= rect.left)
+                                            || (lastX <= rect.right && lastX >= rect.left);
+                                            
+                                        //右上角
+                                    if (XLeft && YTop) { 
+                                        updateBoxRect(2 * (lastX - currentX), (lastY - currentY), true); 
+                                        //左上角
+                                    } else if (XRight && YTop) {
                                         updateBoxRect(2 * (currentX - lastX), (lastY - currentY), true);
-
-                                    } else if (((currentX >= rect.left - BIG_BUFFER && currentX <= rect.left + BIG_BUFFER)
-                                            || (lastX >= rect.left - BIG_BUFFER && lastX <= rect.left + BIG_BUFFER))
-                                            && ((currentY <= rect.bottom + BIG_BUFFER && currentY >= rect.bottom - BIG_BUFFER)
-                                            || (lastY <= rect.bottom + BIG_BUFFER && lastY >= rect.bottom - BIG_BUFFER))) {//右下角
+                                        //右下角
+                                    } else if (XLeft && YBottom) {
                                         updateBoxRect(2 * (lastX - currentX), (currentY - lastY), false);
-
-                                    } else if (((currentX >= rect.right - BIG_BUFFER && currentX <= rect.right + BIG_BUFFER)
-                                            || (lastX >= rect.right - BIG_BUFFER && lastX <= rect.right + BIG_BUFFER))
-                                            && ((currentY <= rect.bottom + BIG_BUFFER && currentY >= rect.bottom - BIG_BUFFER)
-                                            || (lastY <= rect.bottom + BIG_BUFFER && lastY >= rect.bottom - BIG_BUFFER))) {//左下角
+                                        //左下角
+                                    } else if (XRight && YBottom) {
                                         updateBoxRect(2 * (currentX - lastX), (currentY - lastY), false);
-
-                                    } else if (((currentX >= rect.left - BUFFER && currentX <= rect.left + BUFFER)
-                                            || (lastX >= rect.left - BUFFER && lastX <= rect.left + BUFFER))
-                                            && ((currentY <= rect.bottom && currentY >= rect.top)
-                                            || (lastY <= rect.bottom && lastY >= rect.top))) { //左侧
+                                        //左侧
+                                    } else if (XLeft && YTopBottom) { 
                                         updateBoxRect(2 * (lastX - currentX), 0, false);
-
-                                    } else if (((currentX >= rect.right - BUFFER && currentX <= rect.right + BUFFER)
-                                            || (lastX >= rect.right - BUFFER && lastX <= rect.right + BUFFER))
-                                            && ((currentY <= rect.bottom && currentY >= rect.top)
-                                            || (lastY <= rect.bottom && lastY >= rect.top))) { //右侧
+                                        //右侧
+                                    } else if (XRight && YTopBottom) { 
                                         updateBoxRect(2 * (currentX - lastX), 0, false);
-
-                                    } else if (((currentY <= rect.top + BUFFER && currentY >= rect.top - BUFFER)
-                                            || (lastY <= rect.top + BUFFER && lastY >= rect.top - BUFFER))
-                                            && ((currentX <= rect.right && currentX >= rect.left)
-                                            || (lastX <= rect.right && lastX >= rect.left))) { //上方
+                                        //上方
+                                    } else if (YTop && XLeftRight) { 
                                         updateBoxRect(0, (lastY - currentY), true);
-
-                                    } else if (((currentY <= rect.bottom + BUFFER && currentY >= rect.bottom - BUFFER)
-                                            || (lastY <= rect.bottom + BUFFER && lastY >= rect.bottom - BUFFER))
-                                            && ((currentX <= rect.right && currentX >= rect.left)
-                                            || (lastX <= rect.right && lastX >= rect.left))) { //下方
+                                        //下方
+                                    } else if (YBottom && XLeftRight) {
                                         updateBoxRect(0, (currentY - lastY), false);
-
                                     }
                                 }
                             } catch (NullPointerException e) {
+                                e.printStackTrace();
                             }
                             v.invalidate();
                             lastX = currentX;
                             lastY = currentY;
                             return true;
                         case MotionEvent.ACTION_UP:
-                            mHandler.removeMessages(1); //移除之前的刷新
-                            mRect = mFrameRect; //松手时对外更新
+                            //移除之前的刷新
+                            mHandler.removeMessages(1);
+                            //松手时对外更新
+                            mRect = mFrameRect; 
                             lastX = -1;
                             lastY = -1;
                             return true;
+                        default:
+                            
                     }
                     return false;
                 }
             };
+        }
 
         return touchListener;
     }
@@ -333,8 +335,9 @@ public final class ScannerFinderView extends RelativeLayout {
             return;
         }
 
-        if (newWidth < MIN_FOCUS_BOX_WIDTH || newHeight < MIN_FOCUS_BOX_HEIGHT)
+        if (newWidth < MIN_FOCUS_BOX_WIDTH || newHeight < MIN_FOCUS_BOX_HEIGHT){
             return;
+        }
 
         mFrameRect = new Rect(leftOffset, topOffset, leftOffset + newWidth, topOffset + newHeight);
     }
