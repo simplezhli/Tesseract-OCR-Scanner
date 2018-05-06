@@ -22,7 +22,7 @@ public class TessDataManager {
 
     private static final String tessdir = "tesseract";
     private static final String subdir = "tessdata";
-    private static final String filename = "eng_traineddata";
+    private static final String filename = "eng.traineddata";
 
     private static String trainedDataPath;
 
