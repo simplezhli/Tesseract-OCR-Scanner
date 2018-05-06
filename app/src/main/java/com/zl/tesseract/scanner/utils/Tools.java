@@ -169,17 +169,17 @@ public class Tools {
         return res;
     }
 
-    private static Pattern pattern = Pattern.compile("(1|861)(3|5|7|8)\\d{9}$*");
+    private static Pattern pattern = Pattern.compile("(1|861)\\d{10}$*");
 
     public static String getTelNum(String sParam){
         if(TextUtils.isEmpty(sParam)){
             return "";
         }
         
-        Matcher matcher = pattern.matcher(sParam);
+        Matcher matcher = pattern.matcher(sParam.trim());
         StringBuilder bf = new StringBuilder();
         while (matcher.find()) {
-            bf.append(matcher.group()).append(",");
+            bf.append(matcher.group()).append("\n");
         }
         int len = bf.length();
         if (len > 0) {

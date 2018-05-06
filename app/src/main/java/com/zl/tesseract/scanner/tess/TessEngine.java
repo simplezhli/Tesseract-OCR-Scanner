@@ -31,7 +31,7 @@ public class TessEngine {
         String path = TessDataManager.getTesseractFolder();
         Log.d(TAG, "Tess folder: " + path);
         tessBaseAPI.setDebug(true);
-        tessBaseAPI.init(path, "eng");
+        tessBaseAPI.init(path, "eng_traineddata");
         // 白名单
         tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
         // 黑名单

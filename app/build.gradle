@@ -12,7 +12,7 @@ android {
         versionName "1.0.2"
 
         ndk {
-            abiFilters 'armeabi'
+            abiFilters 'armeabi-v7a'
         }
     }
     buildTypes {
@@ -26,6 +26,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.rmtheis:tess-two:8.0.0'
+    implementation 'com.rmtheis:tess-two:9.0.0'
     implementation project(path: ':zxing')
 }

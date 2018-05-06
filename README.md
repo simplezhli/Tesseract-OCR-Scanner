@@ -7,9 +7,19 @@ Tesseract-OCR-Scanner是基于Tesseract-OCR实现的数字自动识别。
 <img src="/preview/1.jpg" width="280px"/> <img src="/preview/2.jpg" width="280px"/>
  <img src="/preview/3.jpg" width="280px"/>
 
+<img src="/preview/4.png" width="320px"/>
+
 ## 实现说明
 
 具体参考博客：http://blog.csdn.net/qq_17766199/article/details/77963278
+
+## 其他
+
+- 训练数据放在res/raw目录下，需要识别其他语言可另行下载替换。本项目使用的为英文识别训练包。
+
+- 数字识别时，框小一点会好识别。（可以手动调节大小的扫描框）
+
+- 数字识别对于手写体识别效率不高，主要是训练包问题。有需求可自行训练。
 
 ## Thanks For
 
