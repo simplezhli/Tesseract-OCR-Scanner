@@ -1,9 +1,6 @@
 package com.zl.tesseract.scanner.tess;
 
 import android.graphics.Bitmap;
-import android.os.Looper;
-
-import com.zl.tesseract.scanner.MyApplication;
 
 /**
  *
@@ -25,6 +22,6 @@ public class TesseractThread implements Runnable {
             mCallback.fail();
             return;
         }
-        mCallback.succeed(TessEngine.Generate(MyApplication.sAppContext).detectText(mBitmap));
+        mCallback.succeed(TessEngine.Generate().detectText(mBitmap));
     }
 }
