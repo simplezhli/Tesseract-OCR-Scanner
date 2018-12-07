@@ -171,13 +171,16 @@ public class Tools {
 
     private static Pattern pattern = Pattern.compile("(1|861)\\d{10}$*");
 
+    private static StringBuilder bf = new StringBuilder();
+
     public static String getTelNum(String sParam){
         if(TextUtils.isEmpty(sParam)){
             return "";
         }
         
         Matcher matcher = pattern.matcher(sParam.trim());
-        StringBuilder bf = new StringBuilder();
+        bf.delete(0, bf.length());
+
         while (matcher.find()) {
             bf.append(matcher.group()).append("\n");
         }

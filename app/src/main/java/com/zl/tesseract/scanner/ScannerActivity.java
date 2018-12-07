@@ -119,19 +119,18 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
             initCamera(surfaceHolder);
         } else {
             surfaceHolder.addCallback(this);
+            // 防止sdk8的设备初始化预览异常(可去除，本项目最小16)
             surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
         if (mCaptureActivityHandler != null) {
             try {
                 mCaptureActivityHandler.quitSynchronously();
                 mCaptureActivityHandler = null;
-                mHasSurface = false;
-                if (null != mSurfaceView) {
+                if (null != mSurfaceView && !mHasSurface) {
                     mSurfaceView.getHolder().removeCallback(this);
                 }
                 CameraManager.get().closeDriver();
@@ -140,6 +139,7 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
                 finish();
             }
         }
+        super.onPause();
     }
 
     @Override

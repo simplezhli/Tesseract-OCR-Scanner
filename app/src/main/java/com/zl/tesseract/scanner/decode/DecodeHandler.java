@@ -29,7 +29,6 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.zl.tesseract.R;
 import com.zl.tesseract.scanner.ScannerActivity;
-import com.zl.tesseract.scanner.MyApplication;
 import com.zl.tesseract.scanner.tess.TessEngine;
 
 import java.util.ArrayList;
@@ -111,11 +110,11 @@ final class DecodeHandler extends Handler {
 
             PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(mRotatedData, width, height, rect.left, rect.top, rect.width(), rect.height(), false);
 
-            if( mActivity.isQRCode()){
+            if (mActivity.isQRCode()){
                 BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
                 rawResult = mMultiFormatReader.decode(bitmap1, mHints);
             }else{
-                TessEngine tessEngine = TessEngine.Generate(MyApplication.sAppContext);
+                TessEngine tessEngine = TessEngine.Generate();
                 Bitmap bitmap = source.renderCroppedGreyscaleBitmap();
                 String result = tessEngine.detectText(bitmap);
                 if(!TextUtils.isEmpty(result)){
