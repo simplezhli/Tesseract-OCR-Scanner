@@ -39,11 +39,12 @@ public final class CameraConfigurationUtils {
             Log.i(TAG, "Supported preview sizes: " + previewSizesString);
         }
 
-        double screenAspectRatio = screenResolution.x / (double) screenResolution.y;
+//        double screenAspectRatio = screenResolution.x / (double) screenResolution.y;
 
         // Find a suitable size, with max resolution
-        int maxResolution = 0;
+//        int maxResolution = 0;
         Camera.Size maxResPreviewSize = null;
+        int diff = Integer.MAX_VALUE;
         for (Camera.Size size : rawSupportedSizes) {
             int realWidth = size.width;
             int realHeight = size.height;
@@ -55,11 +56,11 @@ public final class CameraConfigurationUtils {
             boolean isCandidatePortrait = realWidth < realHeight;
             int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
             int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
-            double aspectRatio = maybeFlippedWidth / (double) maybeFlippedHeight;
-            double distortion = Math.abs(aspectRatio - screenAspectRatio);
-            if (distortion > MAX_ASPECT_DISTORTION) {
-                continue;
-            }
+//            double aspectRatio = maybeFlippedWidth / (double) maybeFlippedHeight;
+//            double distortion = Math.abs(aspectRatio - screenAspectRatio);
+//            if (distortion > MAX_ASPECT_DISTORTION) {
+//                continue;
+//            }
 
             if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
                 Point exactPoint = new Point(realWidth, realHeight);
@@ -67,11 +68,17 @@ public final class CameraConfigurationUtils {
                 return exactPoint;
             }
 
-            // Resolution is suitable; record the one with max resolution
-            if (resolution > maxResolution) {
-                maxResolution = resolution;
+            int newDiff = Math.abs(maybeFlippedWidth - screenResolution.x) + Math.abs(maybeFlippedHeight - screenResolution.y);
+            if (newDiff < diff) {
                 maxResPreviewSize = size;
+                diff = newDiff;
             }
+
+            // Resolution is suitable; record the one with max resolution
+//            if (resolution > maxResolution) {
+//                maxResolution = resolution;
+//                maxResPreviewSize = size;
+//            }
         }
 
         // If no exact match, use largest preview size. This was not a great idea on older devices because
