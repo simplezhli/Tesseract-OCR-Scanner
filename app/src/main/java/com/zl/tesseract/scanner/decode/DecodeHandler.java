@@ -26,6 +26,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 import com.zl.tesseract.R;
 import com.zl.tesseract.scanner.ScannerActivity;
@@ -43,7 +44,8 @@ final class DecodeHandler extends Handler {
     private final MultiFormatReader mMultiFormatReader;
     private final Map<DecodeHintType, Object> mHints;
     private byte[] mRotatedData;
-
+    private static final String TAG = "DecodeHandler";
+    
     DecodeHandler(ScannerActivity activity) {
         this.mActivity = activity;
         mMultiFormatReader = new MultiFormatReader();
@@ -111,8 +113,14 @@ final class DecodeHandler extends Handler {
             PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(mRotatedData, width, height, rect.left, rect.top, rect.width(), rect.height(), false);
 
             if (mActivity.isQRCode()){
-                BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-                rawResult = mMultiFormatReader.decode(bitmap1, mHints);
+                /*
+                 HybridBinarizer算法使用了更高级的算法，针对渐变图像更优，也就是准确率高。
+                 但使用GlobalHistogramBinarizer识别效率确实比HybridBinarizer要高一些。
+                 */
+                rawResult = mMultiFormatReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
+                if (rawResult == null) {
+                    rawResult = mMultiFormatReader.decode(new BinaryBitmap(new HybridBinarizer(source)), mHints);
+                }
             }else{
                 TessEngine tessEngine = TessEngine.Generate();
                 Bitmap bitmap = source.renderCroppedGreyscaleBitmap();

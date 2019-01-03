@@ -38,7 +38,13 @@ public final class CameraConfigurationManager {
 	private Point cameraResolution;
 
 	public void initFromCameraParameters(Camera camera) {
+		// 需要判断摄像头是否支持缩放
 		Camera.Parameters parameters = camera.getParameters();
+		if (parameters.isZoomSupported()) {
+			// 设置成最大倍数的1/10，基本符合远近需求
+			parameters.setZoom(parameters.getMaxZoom() / 10);
+		}
+		
 		WindowManager manager = (WindowManager) MyApplication.sAppContext.getSystemService(Context.WINDOW_SERVICE);
 		Display display = manager.getDefaultDisplay();
 //		Point theScreenResolution = getDisplaySize(display);
