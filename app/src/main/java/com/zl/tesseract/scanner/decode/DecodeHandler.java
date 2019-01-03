@@ -44,7 +44,6 @@ final class DecodeHandler extends Handler {
     private final MultiFormatReader mMultiFormatReader;
     private final Map<DecodeHintType, Object> mHints;
     private byte[] mRotatedData;
-    private static final String TAG = "DecodeHandler";
     
     DecodeHandler(ScannerActivity activity) {
         this.mActivity = activity;
@@ -117,7 +116,7 @@ final class DecodeHandler extends Handler {
                  HybridBinarizer算法使用了更高级的算法，针对渐变图像更优，也就是准确率高。
                  但使用GlobalHistogramBinarizer识别效率确实比HybridBinarizer要高一些。
                  */
-                rawResult = mMultiFormatReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
+                rawResult = mMultiFormatReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)), mHints);
                 if (rawResult == null) {
                     rawResult = mMultiFormatReader.decode(new BinaryBitmap(new HybridBinarizer(source)), mHints);
                 }

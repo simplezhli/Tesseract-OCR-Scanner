@@ -18,12 +18,16 @@ package com.zl.tesseract.scanner.camera;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
 import com.zl.tesseract.scanner.MyApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 设置相机的参数信息，获取最佳的预览界面
@@ -43,6 +47,12 @@ public final class CameraConfigurationManager {
 		if (parameters.isZoomSupported()) {
 			// 设置成最大倍数的1/10，基本符合远近需求
 			parameters.setZoom(parameters.getMaxZoom() / 10);
+		}
+		if (parameters.getMaxNumFocusAreas() > 0) {
+			List focusAreas = new ArrayList();
+			Rect focusRect = new Rect(-900, -900, 900, 0);
+			focusAreas.add(new Camera.Area(focusRect, 1000));
+			parameters.setFocusAreas(focusAreas);
 		}
 		
 		WindowManager manager = (WindowManager) MyApplication.sAppContext.getSystemService(Context.WINDOW_SERVICE);
