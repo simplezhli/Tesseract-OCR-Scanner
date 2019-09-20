@@ -1,10 +1,10 @@
 package com.zl.tesseract.scanner;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.hardware.Camera;
@@ -38,10 +38,18 @@ import com.zl.tesseract.scanner.view.ScannerFinderView;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+
 /**
  * 二维码扫描类。
  */
-public class ScannerActivity extends Activity implements Callback, Camera.PictureCallback, Camera.ShutterCallback{
+public class ScannerActivity extends AppCompatActivity implements Callback, Camera.PictureCallback, Camera.ShutterCallback{
 
     private CaptureActivityHandler mCaptureActivityHandler;
     private boolean mHasSurface;
@@ -60,10 +68,35 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
-        initView();
-        initData();
+        if (ContextCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{CAMERA, READ_EXTERNAL_STORAGE}, 100);
+        } else {
+            initView();
+            initData();
+        }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100){
+            boolean permissionGranted = true;
+            for (int i : grantResults) {
+                if (i != PackageManager.PERMISSION_GRANTED) {
+                    permissionGranted = false;
+                }
+            }
+            if (permissionGranted){
+                initView();
+                initData();
+            }else {
+                // 无权限退出
+               finish();
+            }
+        }
+    }
+    
     private void initView() {
         mQrCodeFinderView = (ScannerFinderView) findViewById(R.id.qr_code_view_finder);
         mSurfaceViewStub = (ViewStub) findViewById(R.id.qr_code_view_stub);
@@ -105,8 +138,10 @@ public class ScannerActivity extends Activity implements Callback, Camera.Pictur
     @Override
     protected void onResume() {
         super.onResume();
-        CameraManager.init();
-        initCamera();
+        if (mInactivityTimer != null){
+            CameraManager.init();
+            initCamera();
+        }
     }
 
     private void initCamera() {
